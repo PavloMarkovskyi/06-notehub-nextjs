@@ -1,3 +1,5 @@
+'use client';
+
 import NotesClient from './Notes.client';
 
 const NotesPage = () => {

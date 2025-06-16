@@ -11,10 +11,15 @@ import { fetchNotes, createNote, deleteNote } from '@/lib/api';
 import type { Note } from '../../types/note';
 import NoteList from '@/components/NoteList/NoteList';
 import NoteModal from '@/components/NoteModal/NoteModal';
-import Pagination from '@/components/Pagination/Pagination';
+// import Pagination from '@/components/Pagination/Pagination';
 import SearchBox from '@/components/SearchBox/SearchBox';
 import css from './Notes.module.css';
 import { useDebounce } from 'use-debounce';
+import dynamic from 'next/dynamic';
+
+const Pagination = dynamic(() => import('@/components/Pagination/Pagination'), {
+  ssr: false,
+});
 
 const PER_PAGE = Number(process.env.NEXT_PUBLIC_NOTES_PER_PAGE) || 12;
 
