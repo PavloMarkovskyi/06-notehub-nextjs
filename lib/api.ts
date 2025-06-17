@@ -62,18 +62,17 @@ export const createNote = async (
 
 export const deleteNote = async (
   id: number
-): Promise<{ message: string }> => {
-  const response = await axios.delete<{ message: string }>(
+): Promise<Note> => {
+  const response = await axios.delete<Note>(
     `${BASE_URL}/notes/${id}`,
     getAuthHeaders()
   );
   return response.data;
 };
 export const fetchNoteById = async (id: number): Promise<Note> => {
-  const { data } = await axios.get(`${BASE_URL}/notes/${id}`, {
-    headers: {
-      Authorization: `Bearer ${process.env.NEXT_PUBLIC_NOTEHUB_TOKEN}`,
-    },
-  });
-  return data;
+  const response = await axios.get<Note>(
+    `${BASE_URL}/notes/${id}`,
+    getAuthHeaders()
+  );
+  return response.data;
 };

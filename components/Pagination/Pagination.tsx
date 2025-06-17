@@ -5,6 +5,14 @@ interface PaginationProps {
   pageCount: number;
   currentPage: number;
   onPageChange: (page: number) => void;
+  previousLabel?: string;
+  nextLabel?: string;
+  breakLabel?: string;
+  pageRangeDisplayed?: number;
+  marginPagesDisplayed?: number;
+  containerClassName?: string;
+  activeClassName?: string;
+  disabledClassName?: string;
 }
 
 const Pagination = ({

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import NoteForm from '../NoteForm/NoteForm';
 import css from './NoteModal.module.css';
@@ -12,12 +12,7 @@ interface NoteModalProps {
 }
 
 const NoteModal = ({ onClose, onCreateNote }: NoteModalProps) => {
-  const [modalRoot, setModalRoot] = useState<HTMLElement | null>(null);
-
   useEffect(() => {
-    const root = document.getElementById('modal-root');
-    setModalRoot(root);
-
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
 
@@ -36,9 +31,6 @@ const NoteModal = ({ onClose, onCreateNote }: NoteModalProps) => {
     if (e.target === e.currentTarget) onClose();
   };
 
-  // ⛔️ Don't render portal until modalRoot is available
-  if (!modalRoot) return null;
-
   return ReactDOM.createPortal(
     <div
       className={css.backdrop}
@@ -54,7 +46,7 @@ const NoteModal = ({ onClose, onCreateNote }: NoteModalProps) => {
         <NoteForm onClose={onClose} onCreateNote={onCreateNote} />
       </div>
     </div>,
-    modalRoot
+    document.body
   );
 };
 

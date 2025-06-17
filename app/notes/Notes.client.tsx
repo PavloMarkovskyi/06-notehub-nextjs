@@ -1,13 +1,18 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import {
   useQuery,
   useMutation,
   useQueryClient,
   keepPreviousData,
 } from '@tanstack/react-query';
-import { fetchNotes, createNote, deleteNote } from '@/lib/api';
+import {
+  fetchNotes,
+  createNote,
+  deleteNote,
+  FetchNotesResponse,
+} from '@/lib/api';
 import type { Note } from '../../types/note';
 import NoteList from '@/components/NoteList/NoteList';
 import NoteModal from '@/components/NoteModal/NoteModal';
@@ -23,7 +28,11 @@ const Pagination = dynamic(() => import('@/components/Pagination/Pagination'), {
 
 const PER_PAGE = Number(process.env.NEXT_PUBLIC_NOTES_PER_PAGE) || 12;
 
-const NotesClient = () => {
+interface NotesClientProps {
+  initialData: FetchNotesResponse;
+}
+
+const NotesClient = ({ initialData }: NotesClientProps) => {
   const [page, setPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -38,6 +47,8 @@ const NotesClient = () => {
       fetchNotes({ page, perPage: PER_PAGE, search: debouncedSearchTerm }),
     staleTime: 1000 * 60 * 5,
     placeholderData: keepPreviousData,
+    initialData:
+      page === 1 && debouncedSearchTerm === '' ? initialData : undefined,
   });
 
   const createMutation = useMutation({
