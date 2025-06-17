@@ -7,24 +7,14 @@ import {
   useQueryClient,
   keepPreviousData,
 } from '@tanstack/react-query';
-import {
-  fetchNotes,
-  createNote,
-  deleteNote,
-  FetchNotesResponse,
-} from '@/lib/api';
+import { fetchNotes, createNote, FetchNotesResponse } from '@/lib/api';
 import type { Note } from '../../types/note';
 import NoteList from '@/components/NoteList/NoteList';
 import NoteModal from '@/components/NoteModal/NoteModal';
-// import Pagination from '@/components/Pagination/Pagination';
+import Pagination from '@/components/Pagination/Pagination';
 import SearchBox from '@/components/SearchBox/SearchBox';
 import css from './Notes.module.css';
 import { useDebounce } from 'use-debounce';
-import dynamic from 'next/dynamic';
-
-const Pagination = dynamic(() => import('@/components/Pagination/Pagination'), {
-  ssr: false,
-});
 
 const PER_PAGE = Number(process.env.NEXT_PUBLIC_NOTES_PER_PAGE) || 12;
 
@@ -59,25 +49,12 @@ const NotesClient = ({ initialData }: NotesClientProps) => {
     },
   });
 
-  const deleteMutation = useMutation({
-    mutationFn: deleteNote,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['notes'] });
-    },
-  });
-
   const handleCreateNote = (note: {
     title: string;
     content?: string;
     tag: Note['tag'];
   }) => {
     createMutation.mutate(note);
-  };
-
-  const handleDeleteNote = (id: number) => {
-    if (window.confirm('Are you sure you want to delete this note?')) {
-      deleteMutation.mutate(id);
-    }
   };
 
   const handleSearchChange = (value: string) => {
@@ -106,9 +83,7 @@ const NotesClient = ({ initialData }: NotesClientProps) => {
       {isLoading && <p>Loading notes...</p>}
       {isError && <p>Error: {(error as Error).message}</p>}
 
-      {data && data.notes.length > 0 && (
-        <NoteList notes={data.notes} onDeleteNote={handleDeleteNote} />
-      )}
+      {data && data.notes.length > 0 && <NoteList notes={data.notes} />}
       {data && data.notes.length === 0 && (
         <p className={css.empty}>No notes found. Try adjusting your search.</p>
       )}
