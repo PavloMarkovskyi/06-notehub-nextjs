@@ -28,10 +28,10 @@ export interface NewNotePayload {
 }
 
 export const fetchNotes = async ({
-  page,
-  perPage,
-  search,
-}: FetchNotesParams): Promise<FetchNotesResponse> => {
+  page = 1,
+  perPage = 12,
+  search = '',
+}: Partial<FetchNotesParams> = {}): Promise<FetchNotesResponse> => {
   const params = new URLSearchParams({
     page: String(page),
     perPage: String(perPage),
@@ -76,3 +76,15 @@ export const fetchNoteById = async (id: number): Promise<Note> => {
   );
   return response.data;
 };
+
+// export const updateNote = async (
+//   id: number,
+//   updates: Partial<NewNotePayload>
+// ): Promise<Note> => {
+//   const response = await axios.patch<Note>(
+//     `${BASE_URL}/notes/${id}`,
+//     updates,
+//     getAuthHeaders()
+//   );
+//   return response.data;
+// };

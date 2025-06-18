@@ -7,6 +7,7 @@ export interface Note {
   tag: NoteTag;
   isArchived: boolean;
   createdAt: string;
+  updatedAt: string;
 }
 
 export interface NewNotePayload {
